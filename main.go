@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Rencist/golang-todo/common"
 	"Rencist/golang-todo/config"
 	"Rencist/golang-todo/entity"
 	"database/sql"
@@ -47,7 +48,12 @@ func main() {
 		// tell the client that the content type is json
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(http.StatusOK)
-		fmt.Fprintln(w, res)
+		data := entity.Todo{
+			ID: res.ID,
+			Todo: res.Todo,
+			CreatedAt: res.CreatedAt,
+		}
+		common.BuildResponse(w, true, "OK", data)
 	})
 	
 	fmt.Println("starting web server at http://localhost:8080/")
