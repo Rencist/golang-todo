@@ -2,11 +2,20 @@ package config
 
 import "database/sql"
 
-func SetupDatabaseConnection() (*sql.DB, error) {
+func SetupDatabaseConnection() (*sql.DB) {
 	db, err := sql.Open("pgx", "postgres://postgres:rencist@localhost:5432/todo")
 	if err != nil {
-		return nil, err
+		panic(err)
 	}
 
-	return db, nil
+	if err != nil {
+		panic(err)
+	}
+
+	err = db.Ping()
+	if err != nil {
+		panic(err)
+	}
+
+	return db
 }
