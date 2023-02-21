@@ -10,8 +10,9 @@ import (
 )
 
 type TodoController interface {
-	// GetAllTodo(ctx *gin.Context)
+	GetAllTodo(w http.ResponseWriter, r *http.Request)
 	CreateTodo(w http.ResponseWriter, r *http.Request)
+	GetTodoByID(w http.ResponseWriter, r *http.Request)
 	// DeleteTodo(ctx *gin.Context)
 }
 
@@ -44,29 +45,24 @@ func(tc *todoController) CreateTodo(w http.ResponseWriter, r *http.Request) {
 	common.BuildResponse(w, true, "OK", data)
 }
 
-func(tc *todoController) GetAllTodo() {
-	
-	http.HandleFunc("/all", func(w http.ResponseWriter, r *http.Request) {
-		res, err := service.TodoService.GetAllTodo(tc.todoService)
-		if err != nil {
-			fmt.Println(err)
-		}
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		common.BuildResponse(w, true, "OK", res)
-	})
+func(tc *todoController) GetAllTodo(w http.ResponseWriter, r *http.Request) {
+	res, err := service.TodoService.GetAllTodo(tc.todoService)
+	if err != nil {
+		fmt.Println(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	common.BuildResponse(w, true, "OK", res)
 }
 
-func(tc *todoController) GetTodoByID() {
-	http.HandleFunc("/get", func(w http.ResponseWriter, r *http.Request) {
-		todo_id := r.URL.Query().Get("id")
-		lmao, _ := strconv.ParseUint(string(todo_id), 10, 64)
-		res, err := service.TodoService.GetTodoByID(tc.todoService, lmao)
-		if err != nil {
-			fmt.Println(err)
-		}
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
-		common.BuildResponse(w, true, "OK", res)
-	})
+func(tc *todoController) GetTodoByID(w http.ResponseWriter, r *http.Request) {
+	todo_id := r.URL.Query().Get("id")
+	lmao, _ := strconv.ParseUint(string(todo_id), 10, 64)
+	res, err := service.TodoService.GetTodoByID(tc.todoService, lmao)
+	if err != nil {
+		fmt.Println(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	common.BuildResponse(w, true, "OK", res)
 }
