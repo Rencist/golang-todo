@@ -9,7 +9,7 @@ type TodoService interface {
 	GetAllTodo() ([]entity.Todo, error)
 	CreateTodo(todo entity.Todo) (entity.Todo, error) 
 	GetTodoByID(todoID uint64) (entity.Todo, error)
-	// DeleteTodo(ctx context.Context, todoID uint64) (entity.Todo, error)
+	DeleteTodo(todoID uint64) (entity.Todo, error)
 }
 
 func NewTodoService(tr repository.TodoRepository) TodoService {
@@ -32,4 +32,8 @@ func(ts *todoService) GetAllTodo() ([]entity.Todo, error) {
 
 func(ts *todoService) GetTodoByID(todoID uint64) (entity.Todo, error) {
 	return ts.todoRepository.GetTodoByID(todoID)
+}
+
+func(ts *todoService) DeleteTodo(todoID uint64) (entity.Todo, error) {
+	return ts.todoRepository.DeleteTodo(todoID)
 }

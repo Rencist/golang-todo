@@ -17,4 +17,8 @@ func TodoRoutes(TodoController controller.TodoController) {
 	http.HandleFunc("/show", func(w http.ResponseWriter, r *http.Request) {
 		TodoController.GetTodoByID(w, r)
 	})
+
+	http.HandleFunc("/delete", func(w http.ResponseWriter, r *http.Request) {
+		TodoController.DeleteTodo(w, r)
+	})
 }

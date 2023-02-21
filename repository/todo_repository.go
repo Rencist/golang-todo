@@ -10,7 +10,7 @@ type TodoRepository interface {
 	GetAllTodo() ([]entity.Todo, error)
 	CreateTodo(todo entity.Todo) (entity.Todo, error)
 	GetTodoByID(todoID uint64) (entity.Todo, error)
-	// DeleteTodo(ctx context.Context, todoID uint64) (entity.Todo, error)
+	DeleteTodo(todoID uint64) (entity.Todo, error)
 }
 
 type todoConnection struct {
@@ -60,6 +60,22 @@ func(db *todoConnection) GetAllTodo() ([]entity.Todo, error) {
 
 func(db *todoConnection) GetTodoByID(todoID uint64) (entity.Todo, error) {
 	rows, err := db.connection.Query("SELECT * FROM TODO WHERE id = $1", todoID)
+	rows.Next()
+	if err != nil {
+		return entity.Todo{}, err
+	}
+	defer rows.Close()
+	result := entity.Todo{}
+	rows.Scan(&result.ID, &result.Todo, &result.CreatedAt)
+	err = rows.Err()
+	if err != nil {
+		log.Fatal(err)
+	}
+	return result, nil
+}
+
+func(db *todoConnection) DeleteTodo(todoID uint64) (entity.Todo, error) {
+	rows, err := db.connection.Query("DELETE FROM TODO WHERE id = $1", todoID)
 	rows.Next()
 	if err != nil {
 		return entity.Todo{}, err

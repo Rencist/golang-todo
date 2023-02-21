@@ -13,7 +13,7 @@ type TodoController interface {
 	GetAllTodo(w http.ResponseWriter, r *http.Request)
 	CreateTodo(w http.ResponseWriter, r *http.Request)
 	GetTodoByID(w http.ResponseWriter, r *http.Request)
-	// DeleteTodo(ctx *gin.Context)
+	DeleteTodo(w http.ResponseWriter, r *http.Request)
 }
 
 type todoController struct {
@@ -59,6 +59,19 @@ func(tc *todoController) GetTodoByID(w http.ResponseWriter, r *http.Request) {
 	todo_id := r.URL.Query().Get("id")
 	lmao, _ := strconv.ParseUint(string(todo_id), 10, 64)
 	res, err := service.TodoService.GetTodoByID(tc.todoService, lmao)
+	if err != nil {
+		fmt.Println(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	common.BuildResponse(w, true, "OK", res)
+}
+
+func(tc *todoController) DeleteTodo(w http.ResponseWriter, r *http.Request) {
+	todo_id := r.URL.Query().Get("id")
+	lmao, _ := strconv.ParseUint(string(todo_id), 10, 64)
+	_, err := service.TodoService.DeleteTodo(tc.todoService, lmao)
+	res := entity.Todo{}
 	if err != nil {
 		fmt.Println(err)
 	}
