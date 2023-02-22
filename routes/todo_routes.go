@@ -7,18 +7,26 @@ import (
 
 func TodoRoutes(TodoController controller.TodoController) {
 	http.HandleFunc("/add", func(w http.ResponseWriter, r *http.Request) {
-		TodoController.CreateTodo(w, r)
+		if r.Method == "POST" {
+			TodoController.CreateTodo(w, r)
+		}
 	})
 
 	http.HandleFunc("/index", func(w http.ResponseWriter, r *http.Request) {
-		TodoController.GetAllTodo(w, r)
+		if r.Method == "GET" {
+			TodoController.GetAllTodo(w, r)
+		}
 	})
 	
 	http.HandleFunc("/show", func(w http.ResponseWriter, r *http.Request) {
-		TodoController.GetTodoByID(w, r)
+		if r.Method == "GET" {
+			TodoController.GetTodoByID(w, r)
+		}
 	})
 
 	http.HandleFunc("/delete", func(w http.ResponseWriter, r *http.Request) {
-		TodoController.DeleteTodo(w, r)
+		if r.Method == "DELETE" {
+			TodoController.DeleteTodo(w, r)
+		}
 	})
 }
