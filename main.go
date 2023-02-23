@@ -21,6 +21,6 @@ func main() {
 		todoController controller.TodoController = controller.NewTodoController(todoService)
 	)
 	routes.TodoRoutes(todoController)
-	fmt.Println("starting web server at http://localhost:8080/")
+	fmt.Println("starting web server at http://localhost:8000/")
 	http.ListenAndServe("127.0.0.1:8000", nil)
 }

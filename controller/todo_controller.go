@@ -4,7 +4,6 @@ import (
 	"Rencist/golang-todo/common"
 	"Rencist/golang-todo/entity"
 	"Rencist/golang-todo/service"
-	"fmt"
 	"net/http"
 	"strconv"
 )
@@ -31,9 +30,9 @@ func(tc *todoController) CreateTodo(w http.ResponseWriter, r *http.Request) {
 	todo := entity.Todo{
 		Todo: r.FormValue("todo"),
 	}
-	res, err := service.TodoService.CreateTodo(tc.todoService, todo)
+	res, err := service.TodoService.CreateTodo(tc.todoService, w, r, todo)
 	if err != nil {
-		fmt.Println(err)
+		common.BuildErrorResponse(w, "Gagal Menambahkan Todo", err.Error(), common.EmptyObj{})
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
@@ -46,36 +45,58 @@ func(tc *todoController) CreateTodo(w http.ResponseWriter, r *http.Request) {
 }
 
 func(tc *todoController) GetAllTodo(w http.ResponseWriter, r *http.Request) {
-	res, err := service.TodoService.GetAllTodo(tc.todoService)
+	res, err := service.TodoService.GetAllTodo(tc.todoService, w, r)
 	if err != nil {
-		fmt.Println(err)
+		common.BuildErrorResponse(w, "Gagal Mengambil Data Todo", err.Error(), common.EmptyObj{})
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
+	// temp, err := template.ParseFiles("views/index.html")
+	// if err != nil {
+	// 	common.BuildErrorResponse(w, "Gagal Mengambil Data Todo", err.Error(), common.EmptyObj{})
+	// }
+	// data := map[string]interface{}{
+	// 	"data": res,
+	// }
+	// fmt.Fprintln(w, data)
+	// temp.Execute(w, data)
 	common.BuildResponse(w, true, "OK", res)
 }
 
 func(tc *todoController) GetTodoByID(w http.ResponseWriter, r *http.Request) {
 	todo_id := r.URL.Query().Get("id")
 	lmao, _ := strconv.ParseUint(string(todo_id), 10, 64)
-	res, err := service.TodoService.GetTodoByID(tc.todoService, lmao)
+	res, err := service.TodoService.GetTodoByID(tc.todoService, w, r, lmao)
 	if err != nil {
-		fmt.Println(err)
+		common.BuildErrorResponse(w, "Gagal Mengambil Data Todo", err.Error(), common.EmptyObj{})
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	common.BuildResponse(w, true, "OK", res)
+	if res.Todo == "" {
+		common.BuildResponse(w, true, "OK", common.EmptyObj{})
+	} else {
+		// temp, err := template.ParseFiles("views/index.html")
+		// if err != nil {
+		// 	common.BuildErrorResponse(w, "Gagal Mengambil Data Todo", err.Error(), common.EmptyObj{})
+		// }
+		// data := map[string]interface{}{
+		// 	"ID": res.ID,
+		// 	"Todo": res.Todo,
+		// 	"CreatedAt": res.CreatedAt,
+		// }
+		// temp.Execute(w, data)
+		common.BuildResponse(w, true, "OK", res)
+	}
 }
 
 func(tc *todoController) DeleteTodo(w http.ResponseWriter, r *http.Request) {
 	todo_id := r.URL.Query().Get("id")
 	lmao, _ := strconv.ParseUint(string(todo_id), 10, 64)
-	_, err := service.TodoService.DeleteTodo(tc.todoService, lmao)
-	res := entity.Todo{}
+	_, err := service.TodoService.DeleteTodo(tc.todoService, w, r, lmao)
 	if err != nil {
-		fmt.Println(err)
+		common.BuildErrorResponse(w, "Gagal Menghapus Todo", err.Error(), common.EmptyObj{})
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	common.BuildResponse(w, true, "OK", res)
+	common.BuildResponse(w, true, "OK", common.EmptyObj{})
 }

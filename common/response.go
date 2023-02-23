@@ -43,6 +43,6 @@ func BuildErrorResponse(w http.ResponseWriter, message string, errors string, da
 		fmt.Println(err)
 	}
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusBadRequest)
 	fmt.Fprintln(w, string(res))
 }

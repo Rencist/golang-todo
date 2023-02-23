@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <h1> ID : {{ .ID }}</h1>
+    <h1> Todo : {{ .Todo }}</h1>
+    <h1> CreatedAt : {{ .CreatedAt }}</h1> -->
+
+    <!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Golang CRUD</title>
+  </head>
+  <body>
+    {{ range .data }}
+        <h1>Todo : {{ .Todo }}</h1>
+        <a href="/todo/delete?id={{ .ID }}" data-method="delete" onclick="return confirm('Apakah anda yakin untuk menghapus data?')" class="btn btn-sm btn-danger">Delete</a>
+    {{ end }}
+</body>
+</html>

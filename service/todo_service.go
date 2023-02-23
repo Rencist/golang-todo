@@ -3,13 +3,14 @@ package service
 import (
 	"Rencist/golang-todo/entity"
 	"Rencist/golang-todo/repository"
+	"net/http"
 )
 
 type TodoService interface {
-	GetAllTodo() ([]entity.Todo, error)
-	CreateTodo(todo entity.Todo) (entity.Todo, error) 
-	GetTodoByID(todoID uint64) (entity.Todo, error)
-	DeleteTodo(todoID uint64) (entity.Todo, error)
+	GetAllTodo(w http.ResponseWriter, r *http.Request) ([]entity.Todo, error)
+	CreateTodo(w http.ResponseWriter, r *http.Request, todo entity.Todo) (entity.Todo, error) 
+	GetTodoByID(w http.ResponseWriter, r *http.Request, todoID uint64) (entity.Todo, error)
+	DeleteTodo(w http.ResponseWriter, r *http.Request, todoID uint64) (entity.Todo, error)
 }
 
 func NewTodoService(tr repository.TodoRepository) TodoService {
@@ -22,18 +23,18 @@ type todoService struct {
 	todoRepository repository.TodoRepository
 }
 
-func(ts *todoService) CreateTodo(todo entity.Todo) (entity.Todo, error) {
-	return ts.todoRepository.CreateTodo(todo)
+func(ts *todoService) CreateTodo(w http.ResponseWriter, r *http.Request, todo entity.Todo) (entity.Todo, error) {
+	return ts.todoRepository.CreateTodo(w, r, todo)
 }
 
-func(ts *todoService) GetAllTodo() ([]entity.Todo, error) {
-	return ts.todoRepository.GetAllTodo()
+func(ts *todoService) GetAllTodo(w http.ResponseWriter, r *http.Request) ([]entity.Todo, error) {
+	return ts.todoRepository.GetAllTodo(w, r)
 }
 
-func(ts *todoService) GetTodoByID(todoID uint64) (entity.Todo, error) {
-	return ts.todoRepository.GetTodoByID(todoID)
+func(ts *todoService) GetTodoByID(w http.ResponseWriter, r *http.Request, todoID uint64) (entity.Todo, error) {
+	return ts.todoRepository.GetTodoByID(w, r, todoID)
 }
 
-func(ts *todoService) DeleteTodo(todoID uint64) (entity.Todo, error) {
-	return ts.todoRepository.DeleteTodo(todoID)
+func(ts *todoService) DeleteTodo(w http.ResponseWriter, r *http.Request, todoID uint64) (entity.Todo, error) {
+	return ts.todoRepository.DeleteTodo(w, r, todoID)
 }
