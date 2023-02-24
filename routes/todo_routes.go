@@ -15,6 +15,14 @@ func TodoRoutes(TodoController controller.TodoController) {
 		}
 	})
 
+	http.HandleFunc("/todo/done", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == "PUT" {
+			TodoController.MarkDone(w, r)
+		} else {
+			common.BuildErrorResponse(w, "Endpoint Doesn`t Exist", "", common.EmptyObj{})
+		}
+	})
+
 	http.HandleFunc("/todo/index", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == "GET" {
 			TodoController.GetAllTodo(w, r)

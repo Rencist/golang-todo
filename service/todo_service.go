@@ -8,7 +8,8 @@ import (
 
 type TodoService interface {
 	GetAllTodo(w http.ResponseWriter, r *http.Request) ([]entity.Todo, error)
-	CreateTodo(w http.ResponseWriter, r *http.Request, todo entity.Todo) (entity.Todo, error) 
+	CreateTodo(w http.ResponseWriter, r *http.Request, todo entity.Todo) (entity.Todo, error)
+	MarkDone(w http.ResponseWriter, r *http.Request, todoID uint64) (entity.Todo, error)
 	GetTodoByID(w http.ResponseWriter, r *http.Request, todoID uint64) (entity.Todo, error)
 	DeleteTodo(w http.ResponseWriter, r *http.Request, todoID uint64) (entity.Todo, error)
 }
@@ -33,6 +34,10 @@ func(ts *todoService) GetAllTodo(w http.ResponseWriter, r *http.Request) ([]enti
 
 func(ts *todoService) GetTodoByID(w http.ResponseWriter, r *http.Request, todoID uint64) (entity.Todo, error) {
 	return ts.todoRepository.GetTodoByID(w, r, todoID)
+}
+
+func(ts *todoService) MarkDone(w http.ResponseWriter, r *http.Request, todoID uint64) (entity.Todo, error) {
+	return ts.todoRepository.MarkDone(w, r, todoID)
 }
 
 func(ts *todoService) DeleteTodo(w http.ResponseWriter, r *http.Request, todoID uint64) (entity.Todo, error) {
